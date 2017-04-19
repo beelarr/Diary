@@ -1,7 +1,8 @@
 from peewee import *
 import datetime
-
+from collections import OrderedDict
 db = SqliteDatabase('diary.db')
+
 
 
 class Entry(Model):
@@ -11,21 +12,35 @@ class Entry(Model):
 	class Meta:
 		database = db
 
-	def initialize():
-		db.connect()
-		db.create_tables([Entry], safe=True)
+def initialize():
+	db.connect()
+	db.create_tables([Entry], safe=True)
 
-	def menu_loop():
-		# Show menu
+def menu_loop():
+	choice = None
+	while choice != 'q':
+		print("Enter 'q' to quit.")
+		for key, value in menu.items():
+			print('{}) {}'.format(key, value.__doc__))
+		choice = input('Action: ').lower().strip()
 
-		def add_entry():
-			"""Show menu"""
+		if choice in menu:
+			menu[choice]()
 
-	def view_entries():
-		"""View previous messages"""
 
-	def delete_entry(entry):
-		"""Delete an entry"""
+def add_entry():
+	"""Add an entry."""
+
+def view_entries():
+	"""View previous entries."""
+
+def delete_entry(entry):
+	"""Delete an entry"""
+
+menu = OrderedDict([
+	('a', add_entry),
+	('v', view_entries),
+])
 
 if __name__ == '__main__':
 	initialize()
