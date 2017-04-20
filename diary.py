@@ -1,6 +1,7 @@
 import datetime
 from collections import OrderedDict
 import sys
+import os
 
 from peewee import *
 
@@ -20,9 +21,14 @@ def initialize():
 	db.connect()
 	db.create_tables([Entry], safe=True)
 
+def clear():
+	os.system(clear)
+
+
 def menu_loop():
 	"""Show the menu"""
 	choice = None
+
 	while choice != 'q':
 		print("Enter 'q' to quit.")
 		for key, value in menu.items():
@@ -51,10 +57,13 @@ def view_entries(search_query=None):
 
 	for entry in entries:
 		timestamp = entry.timestamp.strftime('%A %B %d, %Y %I:%M%p')
+		clear()
 		print(timestamp)
 		print('='*len(timestamp))
 		print(entry.content)
+		print('\n\n'+'='*len(timestamp))
 		print('n) next entry')
+		print('d) delete entry')
 		print('q) return to main menu')
 
 		next_action = input('Action: [Nq] ').lower().strip()
@@ -67,6 +76,9 @@ def search_entries():
 
 def delete_entry(entry):
 	"""Delete an entry"""
+	if input('Are you sure? [yN] ').lower() == 'y':
+		entry.delete_instance()
+		print('Entry Deleted!')
 
 menu = OrderedDict([
 	('a', add_entry),
